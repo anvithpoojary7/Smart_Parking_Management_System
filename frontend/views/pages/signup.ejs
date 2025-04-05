@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/signup.css">
+    <script>
+        function toggleForm(role) {
+            if (role === 'admin') {
+                document.getElementById('userForm').style.display = 'none';
+                document.getElementById('adminForm').style.display = 'block';
+            } else {
+                document.getElementById('adminForm').style.display = 'none';
+                document.getElementById('userForm').style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Sign Up</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Select Role</h2>
+            <button class="btn" onclick="toggleForm('user')">User Signup</button>
+            <button class="btn" onclick="toggleForm('admin')">Admin Signup</button>
+
+            <!-- User Signup Form -->
+            <form id="userForm" action="/signup/user" method="POST" >
+                <h3>User Signup</h3>
+                <input type="text" name="fname" placeholder="First Name" required>
+                <input type="text" name="lname" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="text" name="phone" placeholder="Phone Number" required>
+                <select name="user_type" required>
+                    <option value="">Select User Type</option>
+                    <option value="Regular">Regular</option>
+                    <option value="VIP">VIP</option>
+                </select>
+                <select name="lot_id" required>
+                    <option value="">Select Parking Lot</option>
+                    <% lots.forEach(lot => { %>
+                        <option value="<%= lot.lot_id %>"><%= lot.parking_lot_name %> - <%= lot.location %></option>
+                    <% }); %>
+                </select>
+                <button type="submit">Sign Up</button>
+            </form>
+
+            <!-- Admin Signup Form -->
+            <form id="adminForm" action="/signup/admin" method="POST" >
+                <h3>Admin Signup</h3>
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <select name="lot_id" required>
+                    <option value="">Select Parking Lot</option>
+                    <% lots.forEach(lot => { %>
+                        <option value="<%= lot.lot_id %>"><%= lot.Parking_lot_name %> - <%= lot.location %></option>
+                    <% }); %>
+                </select>
+                
+                
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Smart Parking. All rights reserved.</p>
+    </footer>
+</body>
+</html>

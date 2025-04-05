@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Parking Slots</title>
+    <link rel="stylesheet" href="/css/user.css">
+</head>
+<body>
+    <h1>🚗 Available Parking Slots in <%= location %></h1>
+
+    <% if (lots.length === 0) { %>
+        <p>No parking slots found in this location.</p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parking Lot Name</th>
+                    <th>Location</th>
+                    <th>Total Slots</th>
+                    <th>Available Slots</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% lots.forEach(lot => { %>
+                    <tr>
+                        <td><%= lot.parking_lot_name %></td>
+                        <td><%= lot.location %></td>
+                        <td><%= lot.total_slots %></td>
+                        <td><%= lot.available_slots %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+</body>
+</html>

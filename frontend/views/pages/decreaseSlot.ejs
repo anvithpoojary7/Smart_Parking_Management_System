@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decrease Slot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/updateslot.css">
+</head>
+<body>
+
+    <header>
+        <h1>Manage Parking Lot Slots</h1>
+    </header>
+
+    <main>
+        <% if (lots.length === 0) { %>
+            <p>No parking lots found.</p>
+        <% } else { %>
+            <% lots.forEach(lot => { %>
+                <div class="lot-card">
+                    <h3><%= lot.parking_lot_name %> - <%= lot.location %></h3>
+                    <p><strong>Total Slots:</strong> <%= lot.total_slots %></p>
+                    <p><strong>Available Slots:</strong> <%= lot.available_slots %></p>
+
+                    <!-- Decrease Slot Form -->
+                    <form action="/admin/decreaseSlot" method="POST"
+                        onsubmit="return confirm('Are you sure you want to remove 1 slot?');">
+                        <input type="hidden" name="lot_id" value="<%= lot.lot_id %>">
+                        <button type="submit" class="delete-btn">Delete 1 Slot</button>
+                    </form>
+
+                    <!-- Back to update page if needed -->
+                    <form action="/admin/updateSlots" method="GET">
+                        <button type="submit" class="update-btn">Back to Update Page</button>
+                    </form>
+                </div>
+            <% }) %>
+        <% } %>
+    </main>
+
+</body>
+</html>
