@@ -1,48 +1,136 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fc;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 420px;
+    margin: 80px auto;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3b82f6;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    gap: 0.5rem;
 }
 
-.login-container {
-    background: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    text-align: center;
-    width: 300px;
+.logo-icon {
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.input-group {
-    margin-bottom: 15px;
+.subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 0.2rem;
+    margin-bottom: 2rem;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    background-color: #f1f5f9;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.tabs a {
+    flex: 1;
+    padding: 0.7rem;
+    text-decoration: none;
+    font-weight: 500;
+    color: #374151;
+    background-color: #f1f5f9;
+}
+
+.tabs a.active {
+    background-color: white;
+    border-bottom: 2px solid #3b82f6;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+}
+
+form {
     text-align: left;
 }
 
-input, select {
+label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.2rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+input[type="email"],
+input[type="password"] {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+}
+
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.radio-group label {
+    font-weight: normal;
 }
 
 button {
-    background: blue;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
+    margin-top: 1.5rem;
     width: 100%;
-    font-size: 16px;
+    padding: 0.7rem;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 button:hover {
-    background: darkblue;
+    background-color: #2563eb;
 }
 
 p {
-    margin-top: 10px;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }

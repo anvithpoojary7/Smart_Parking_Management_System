@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Slot</title>
+    <link rel="stylesheet" href="/styles/form.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>🚗 Book Your Parking Slot</h1>
+        <form action="/user/bookSlot" method="POST">
+            <input type="hidden" name="userId" value="<%= userId %>" />
+            <input type="hidden" name="slotId" value="<%= slotId %>" />
+
+            <label for="vehicleNumber">Vehicle Number</label>
+            <input type="text" id="vehicleNumber" name="vehicleNumber" required>
+
+            <label for="vehicleType">Vehicle Type</label>
+            <select id="vehicleType" name="vehicleType" required>
+                <option value="Car">Car</option>
+                <option value="Bike">Bike</option>
+                <option value="Truck">Truck</option>
+            </select>
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
+</body>
+</html>

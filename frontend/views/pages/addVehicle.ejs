@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Vehicle</title>
+    <link rel="stylesheet" href="/styles/form.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>🚗 Add Your Vehicle</h2>
+        <form action="/addVehicle" method="POST">
+            <input type="hidden" name="userId" value="<%= userId %>">
+            <input type="hidden" name="slotId" value="<%= slotId %>">
+            
+            <label>Vehicle Number</label>
+            <input type="text" name="vehicle_no" required>
+
+            <label>Vehicle Type</label>
+            <input type="text" name="vehicle_type" required>
+
+            <button type="submit">Continue to Booking</button>
+        </form>
+    </div>
+</body>
+</html>

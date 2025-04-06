@@ -3,34 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>ParkSmart - Login</title>
     <link rel="stylesheet" href="/css/login.css">
+   
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm" action="/login" method="POST">
-            <div class="input-group">
-                <label for="role">Login as:</label>
-                <select id="role" name="user_type" required>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">🅿️</div>
+            ParkSmart
+        </div>
+        <div class="subtitle">Intelligent Parking Management System</div>
 
-                    <option value="user">user</option>
-                    <option value="admin">admin</option>
-                </select>
+        <div class="tabs">
+            <a href="/login" class="active">Login</a>
+            <a href="/signup">Register</a>
+        </div>
+
+        <h2>Login</h2>
+        <p>Enter your credentials to access your account</p>
+
+        <form id="loginForm" action="/login" method="POST">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="name@example.com" required>
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+
+            <label>Account Type</label>
+            <div class="radio-group">
+                <label><input type="radio" name="user_type" value="user" checked> User</label>
+                <label><input type="radio" name="user_type" value="admin"> Admin</label>
             </div>
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+
             <button type="submit">Login</button>
         </form>
-        <p>Don't have an account? <a href="/signup">Sign Up</a></p>
-    </div>
 
-    
+        <p>Don't have an account? <a href="/signup">Switch to Register</a></p>
+    </div>
 </body>
 </html>

@@ -1,76 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="/css/signup.css">
-    <script>
-        function toggleForm(role) {
-            if (role === 'admin') {
-                document.getElementById('userForm').style.display = 'none';
-                document.getElementById('adminForm').style.display = 'block';
-            } else {
-                document.getElementById('adminForm').style.display = 'none';
-                document.getElementById('userForm').style.display = 'block';
-            }
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ParkSmart - Register</title>
+  <link rel="stylesheet" href="/css/signup.css">
+  <script>
+    function toggleForm(role) {
+      document.getElementById('userForm').style.display = role === 'user' ? 'block' : 'none';
+      document.getElementById('adminForm').style.display = role === 'admin' ? 'block' : 'none';
+      document.getElementById('tabUser').classList.toggle('active', role === 'user');
+      document.getElementById('tabAdmin').classList.toggle('active', role === 'admin');
+    }
+
+    window.onload = () => {
+      toggleForm('user'); // default
+    };
+  </script>
 </head>
 <body>
-    <header>
-        <h1>Sign Up</h1>
-    </header>
+  <div class="container">
+    <div class="logo">
+      <div class="logo-icon">🅿️</div>
+      ParkSmart
+    </div>
+    <div class="subtitle">Intelligent Parking Management System</div>
 
-    <main>
-        <div class="container">
-            <h2>Select Role</h2>
-            <button class="btn" onclick="toggleForm('user')">User Signup</button>
-            <button class="btn" onclick="toggleForm('admin')">Admin Signup</button>
+    <div class="tabs">
+      <a href="javascript:void(0)" class="active" id="tabUser" onclick="toggleForm('user')">User</a>
+      <a href="javascript:void(0)" id="tabAdmin" onclick="toggleForm('admin')">Admin</a>
+    </div>
 
-            <!-- User Signup Form -->
-            <form id="userForm" action="/signup/user" method="POST" >
-                <h3>User Signup</h3>
-                <input type="text" name="fname" placeholder="First Name" required>
-                <input type="text" name="lname" placeholder="Last Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="text" name="phone" placeholder="Phone Number" required>
-                <select name="user_type" required>
-                    <option value="">Select User Type</option>
-                    <option value="Regular">Regular</option>
-                    <option value="VIP">VIP</option>
-                </select>
-                <select name="lot_id" required>
-                    <option value="">Select Parking Lot</option>
-                    <% lots.forEach(lot => { %>
-                        <option value="<%= lot.lot_id %>"><%= lot.parking_lot_name %> - <%= lot.location %></option>
-                    <% }); %>
-                </select>
-                <button type="submit">Sign Up</button>
-            </form>
+    <!-- USER SIGNUP -->
+    <form id="userForm" action="/signup/user" method="POST">
+      <h2>Create Account</h2>
+      <p>Join ParkSmart to start using our parking services</p>
 
-            <!-- Admin Signup Form -->
-            <form id="adminForm" action="/signup/admin" method="POST" >
-                <h3>Admin Signup</h3>
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <select name="lot_id" required>
-                    <option value="">Select Parking Lot</option>
-                    <% lots.forEach(lot => { %>
-                        <option value="<%= lot.lot_id %>"><%= lot.Parking_lot_name %> - <%= lot.location %></option>
-                    <% }); %>
-                </select>
-                
-                
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
-    </main>
+      <label for="fname">Full Name</label>
+      <input type="text" name="fname" id="fname" placeholder="John Doe" required>
 
-    <footer>
-        <p>&copy; 2025 Smart Parking. All rights reserved.</p>
-    </footer>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="name@example.com" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+
+      <label for="phone">Phone</label>
+      <input type="text" name="phone" id="phone" placeholder="9876543210" required>
+
+      <label for="user_type">User Type</label>
+      <select name="user_type" required>
+        <option value="">Select User Type</option>
+        <option value="Regular">Regular</option>
+        <option value="VIP">VIP</option>
+      </select>
+
+      <label for="lot_id">Select Parking Lot</label>
+      <select name="lot_id" required>
+        <option value="">Select Parking Lot</option>
+        <% lots.forEach(lot => { %>
+          <option value="<%= lot.lot_id %>"><%= lot.parking_lot_name %> - <%= lot.location %></option>
+        <% }); %>
+      </select>
+
+      <button type="submit">Register</button>
+      <div class="switch-link">
+        Already have an account? <a href="/login">Switch to Login</a>
+      </div>
+    </form>
+
+    <!-- ADMIN SIGNUP -->
+    <form id="adminForm" action="/signup/admin" method="POST" style="display: none;">
+      <h2>Create Admin Account</h2>
+      <p>Register as an admin to manage parking lots</p>
+
+      <label for="name">Full Name</label>
+      <input type="text" name="name" id="name" placeholder="Admin Name" required>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="admin@example.com" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+
+      <label for="lot_id">Assigned Parking Lot</label>
+      <select name="lot_id" required>
+        <option value="">Select Parking Lot</option>
+        <% lots.forEach(lot => { %>
+          <option value="<%= lot.lot_id %>"><%= lot.parking_lot_name %> - <%= lot.location %></option>
+        <% }); %>
+      </select>
+
+      <button type="submit">Register</button>
+      <div class="switch-link">
+        Already have an account? <a href="/login">Switch to Login</a>
+      </div>
+    </form>
+  </div>
 </body>
 </html>

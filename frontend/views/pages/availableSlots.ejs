@@ -1,36 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Available Parking Slots</title>
-    <link rel="stylesheet" href="/css/user.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/availableSlots.css">
 </head>
-<body>
-    <h1>🚗 Available Parking Slots in <%= location %></h1>
 
-    <% if (lots.length === 0) { %>
-        <p>No parking slots found in this location.</p>
-    <% } else { %>
-        <table>
-            <thead>
-                <tr>
-                    <th>Parking Lot Name</th>
-                    <th>Location</th>
-                    <th>Total Slots</th>
-                    <th>Available Slots</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% lots.forEach(lot => { %>
-                    <tr>
-                        <td><%= lot.parking_lot_name %></td>
-                        <td><%= lot.location %></td>
-                        <td><%= lot.total_slots %></td>
-                        <td><%= lot.available_slots %></td>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    <% } %>
+<body>
+    <header class="dashboard-header">
+        <div class="logo">ParkSmart</div>
+        <div class="user-info">
+            <span class="user-role">User</span>
+        
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <h1>Available Parking Slots</h1>
+
+        <div class="lot-grid">
+            <% lots.forEach(lot => { %>
+                <div class="lot-card styled-card">
+                    <h3><%= lot.parking_lot_name %> - <%= lot.location %></h3>
+                    <div class="lot-stats">
+                        <p><strong>Total Slots:</strong> <%= lot.total_slots %></p>
+                        <p><strong>Available Slots:</strong> <%= lot.available_slots %></p>
+                    </div>
+                    <% if (lot.available_slots > 0) { %>
+                        <form action="/user/bookSlot" method="POST">
+                            <input type="hidden" name="lot_id" value="<%= lot.lot_id %>">
+                            <button type="submit" class="book-btn">Book Slot</button>
+                        </form>
+                    <% } else { %>
+                        <button class="book-btn disabled" disabled>No Slots Available</button>
+                    <% } %>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer">
+        <p>&copy; 2025 ParkSmart Management System. All rights reserved.</p>
+    </footer>
 </body>
+
 </html>
