@@ -28,6 +28,17 @@ CREATE TABLE PARKING_LOTS (
     Total_Slots INT,
     Available_Slots INT
 );
+select *from PARKING_LOTS
+select *from PARKING_SLOTS
+
+INSERT INTO PARKING_SLOTS (Slot_No, Lot_Id, Location, Slot_Type, Status)
+VALUES 
+  ('A1', 2, 'Downtown', 'Compact', 'Available'),
+  ('A2', 2, 'Downtown', 'Compact', 'Available'),
+  ('A3', 2, 'Downtown', 'SUV', 'Available'),
+  ('A4', 2, 'Downtown', 'EV', 'Available'),
+  ('A5', 2, 'Downtown', 'Bike', 'Available');
+
 
 -- PARKING_SLOTS table
 CREATE TABLE PARKING_SLOTS (
@@ -152,5 +163,23 @@ ALTER TABLE ADMIN
 ADD COLUMN Lot_Id INT REFERENCES PARKING_LOTS(Lot_Id) ON DELETE CASCADE;
 select *from users
 select *from admin
+select *from RESERVATIONS
+
+SELECT Lot_Id, Status, COUNT(*) FROM PARKING_SLOTS
+GROUP BY Lot_Id, Status;
+
+SELECT Lot_Id, available_slots FROM PARKING_LOTS;
+
+ALTER TABLE USERS ADD COLUMN lot_id INT REFERENCES PARKING_LOTS(lot_id);
+SELECT * FROM USERS;
+SELECT * FROM PARKING_LOTS;
+
+DELETE FROM RESERVATIONS;
+DELETE FROM VEHICLES;
+DELETE FROM USERS;
+DELETE FROM PARKING_SLOTS;
+DELETE FROM PARKING_LOTS;
+
+
 
 

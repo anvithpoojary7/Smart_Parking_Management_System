@@ -177,16 +177,20 @@ app.post("/user/bookSlot", async (req, res) => {
 
         const reservation = result.rows[0];
 
+        // ✅ Only pass required values to confirmation page
         res.render("pages/confirmBooking", {
             reservationId: reservation.reservation_id,
             startTime: reservation.start_time,
-            endTime: reservation.end_time || 'N/A' // In case end_time is NULL
+            endTime: reservation.end_time || 'N/A',
+            userId: reservation.user_id
         });
     } catch (err) {
         console.error("Booking failed:", err);
         res.status(500).send("❌ Booking failed.");
     }
 });
+
+
 
 // Admin Slot Management
 app.get("/admin/updateSlots", async (req, res) => {

@@ -1,16 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Booking Confirmed</title>
-    <link rel="stylesheet" href="/css/confirmation.css">
+  <meta charset="UTF-8">
+  <title>Booking Confirmed</title>
+  <link rel="stylesheet" href="/css/confirmation.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .confirmation-box {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2b5876;
+      margin-bottom: 25px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #f8f9fa;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+      font-size: 18px;
+    }
+
+    strong {
+      color: #333;
+    }
+
+    .btn {
+      margin-top: 25px;
+      padding: 12px 24px;
+      background-color: #4facfe;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #00c3ff;
+    }
+  </style>
 </head>
 <body>
-    <div class="confirmation-container">
-        <h1>✅ Booking Confirmed</h1>
-        <p>Reservation ID: <strong><%= reservationId %></strong></p>
-        <p>Start Time: <%= startTime %></p>
-        <p>End Time: <%= endTime %></p>
-        <a href="/user/parking?location=Downtown">🔙 Back to Parking Page</a>
-    </div>
+  <div class="confirmation-box">
+    <h1>🎉 Thank You for Your Booking!</h1>
+    <ul>
+      <li><strong>Reservation ID:</strong> <%= reservationId %></li>
+      <li><strong>User ID:</strong> <%= userId %></li>
+      <li><strong>Start Time:</strong> <%= startTime %></li>
+      <li><strong>End Time:</strong> <%= endTime %></li>
+    </ul>
+    <a href="/user/parking?location=Downtown&userId=<%= userId %>" class="btn">Go to Dashboard</a>
+
+  </div>
 </body>
 </html>

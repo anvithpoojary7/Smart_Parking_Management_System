@@ -2,23 +2,19 @@
 <html>
 <head>
     <title>Add Vehicle</title>
-    <link rel="stylesheet" href="/styles/form.css">
 </head>
 <body>
-    <div class="form-container">
-        <h2>🚗 Add Your Vehicle</h2>
-        <form action="/addVehicle" method="POST">
-            <input type="hidden" name="userId" value="<%= userId %>">
-            <input type="hidden" name="slotId" value="<%= slotId %>">
-            
-            <label>Vehicle Number</label>
-            <input type="text" name="vehicle_no" required>
+    <h1>Add a New Vehicle</h1>
 
-            <label>Vehicle Type</label>
-            <input type="text" name="vehicle_type" required>
-
-            <button type="submit">Continue to Booking</button>
-        </form>
-    </div>
+    <form action="/user/addVehicle" method="POST">
+        <input type="hidden" name="userId" value="<%= userId %>" />
+        <input type="text" name="vehicleNumber" placeholder="Vehicle Number" required />
+        <select name="vehicleType" required>
+          <option value="Car">Car</option>
+          <option value="Bike">Bike</option>
+        </select>
+        <button type="submit">Add Vehicle</button>
+      </form>
+      
 </body>
 </html>
