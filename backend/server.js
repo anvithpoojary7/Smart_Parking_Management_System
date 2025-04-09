@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const { Pool } = require("pg");
 const path = require("path");
-
+const session = require('express-session');
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +11,13 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Session must come BEFORE routes
+app.use(session({
+    secret: 'parkSmartSecret123!',
+    resave: false,
+    saveUninitialized: false,
+}));
 
 // PostgreSQL pool
 const pool = new Pool({
@@ -50,6 +57,7 @@ app.post("/login", async (req, res) => {
             const isMatch = await bcrypt.compare(password, admin.password);
             if (!isMatch) return res.status(401).send("❌ Incorrect admin password.");
 
+            req.session.email = email; // ✅ Save session here
             console.log("🔑 Admin logged in.");
             return res.redirect("/admin/updateSlots");
 
@@ -62,9 +70,7 @@ app.post("/login", async (req, res) => {
             if (!isMatch) return res.status(401).send("❌ Incorrect user password.");
 
             console.log("👤 User logged in.");
-            req.userId = user.user_id; // Simulating session
             return res.redirect(`/user/parking?location=Downtown&userId=${user.user_id}`);
-
         } else {
             return res.status(400).send("❌ Invalid user type.");
         }
@@ -128,18 +134,16 @@ app.get("/user/parking", async (req, res) => {
 
 // Book Slot Page
 app.get("/bookSlot/:slotId", async (req, res) => {
-   const { slotId } = req.params;
+    const { slotId } = req.params;
     const userId = req.query.userId;
 
     try {
         const vehicles = await pool.query("SELECT * FROM VEHICLES WHERE User_Id = $1", [userId]);
 
         if (vehicles.rows.length === 0) {
-            // No vehicle exists, redirect to add vehicle page
             return res.redirect(`/addVehicle?userId=${userId}&slotId=${slotId}`);
         }
 
-        // Proceed as before if vehicle exists
         res.render("pages/bookSlot", { slotId, vehicles: vehicles.rows, userId });
     } catch (err) {
         console.error("Error checking vehicles:", err);
@@ -152,7 +156,6 @@ app.post("/user/bookSlot", async (req, res) => {
     const { userId, slotId, vehicleId } = req.body;
 
     try {
-        // Check if user already has an active reservation
         const active = await pool.query(
             "SELECT * FROM RESERVATIONS WHERE User_Id = $1 AND Reservation_Status = 'Confirmed'",
             [userId]
@@ -162,14 +165,12 @@ app.post("/user/bookSlot", async (req, res) => {
             return res.status(400).send("⚠️ You already have an active reservation.");
         }
 
-        // Insert new reservation
         const result = await pool.query(`
             INSERT INTO RESERVATIONS (User_Id, Slot_Id, Start_Time, Reservation_Status)
             VALUES ($1, $2, CURRENT_TIMESTAMP, 'Confirmed')
             RETURNING *;
         `, [userId, slotId]);
 
-        // Mark the slot as occupied
         await pool.query(
             "UPDATE PARKING_SLOTS SET Status = 'Occupied' WHERE Slot_Id = $1",
             [slotId]
@@ -177,7 +178,6 @@ app.post("/user/bookSlot", async (req, res) => {
 
         const reservation = result.rows[0];
 
-        // ✅ Only pass required values to confirmation page
         res.render("pages/confirmBooking", {
             reservationId: reservation.reservation_id,
             startTime: reservation.start_time,
@@ -190,66 +190,72 @@ app.post("/user/bookSlot", async (req, res) => {
     }
 });
 
-
-
 // Admin Slot Management
 app.get("/admin/updateSlots", async (req, res) => {
+    const adminEmail = req.session.email;
     try {
-        const result = await pool.query("SELECT * FROM PARKING_LOTS");
-        res.render("pages/updateSlots", { lots: result.rows });
+        const adminResult = await pool.query("SELECT * FROM ADMIN WHERE Email = $1", [adminEmail]);
+        const admin = adminResult.rows[0];
+
+        const lotResult = await pool.query("SELECT * FROM PARKING_LOTS WHERE Lot_Id = $1", [admin.lot_id]);
+
+        res.render("pages/updateSlots", { lots: lotResult.rows });
     } catch (err) {
-        console.error("Error fetching parking lots:", err);
-        res.status(500).send("Error loading parking lot data.");
+        console.error("Error fetching admin lot:", err);
+        res.status(500).send("Error loading data.");
     }
 });
 
+// Update available slots
 app.post("/admin/updateSlots", async (req, res) => {
     const { lot_id, available_slots } = req.body;
-
     try {
-        const totalQuery = await pool.query("SELECT Total_Slots FROM PARKING_LOTS WHERE Lot_Id = $1", [lot_id]);
+        const totalQuery = await pool.query("SELECT total_slots FROM PARKING_LOTS WHERE lot_id = $1", [lot_id]);
         const totalSlots = totalQuery.rows[0].total_slots;
 
         if (parseInt(available_slots) > totalSlots) {
             return res.status(400).send("Available slots cannot exceed total slots.");
         }
 
-        await pool.query(
-            "UPDATE PARKING_LOTS SET Available_Slots = $1 WHERE Lot_Id = $2",
-            [available_slots, lot_id]
-        );
-
+        await pool.query("UPDATE PARKING_LOTS SET available_slots = $1 WHERE lot_id = $2", [available_slots, lot_id]);
         res.redirect("/admin/updateSlots");
     } catch (err) {
         console.error("Error updating slots:", err);
-        res.status(500).send("Update failed");
+        res.status(500).send("Update failed.");
     }
 });
 
-app.get('/admin/decreaseSlot', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM parking_lots ORDER BY parking_lot_name');
-        res.render('decreaseSlot', { lots: result.rows });
-    } catch (err) {
-        console.error('Error fetching lots:', err);
-        res.status(500).send('❌ Server Error.');
-    }
-});
-
-app.post('/admin/decreaseSlot', async (req, res) => {
-    const lotId = req.body.lot_id;
-
+// Decrease slot by 1
+app.post("/admin/decreaseSlot", async (req, res) => {
+    const { lot_id } = req.body;
     try {
         await pool.query(`
-            UPDATE parking_lots 
+            UPDATE PARKING_LOTS 
             SET available_slots = GREATEST(available_slots - 1, 0) 
             WHERE lot_id = $1
-        `, [lotId]);
-
-        res.redirect('/admin/updateSlots');
+        `, [lot_id]);
+        res.redirect("/admin/updateSlots");
     } catch (err) {
-        console.error('Error decreasing slot:', err);
-        res.status(500).send('❌ Server Error while decreasing slot.');
+        console.error("Error decreasing slot:", err);
+        res.status(500).send("Failed to decrease slot.");
+    }
+});
+
+// DELETE SLOT
+app.post("/admin/deleteSlot", async (req, res) => {
+    const { lot_id, slot_no } = req.body;
+    try {
+        await pool.query("DELETE FROM PARKING_SLOTS WHERE Lot_Id = $1 AND Slot_No = $2", [lot_id, slot_no]);
+        await pool.query(`
+            UPDATE PARKING_LOTS 
+            SET total_slots = total_slots - 1, 
+                available_slots = GREATEST(available_slots - 1, 0) 
+            WHERE Lot_Id = $1
+        `, [lot_id]);
+        res.redirect("/admin/updateSlots");
+    } catch (err) {
+        console.error("Error deleting slot:", err);
+        res.status(500).send("Slot deletion failed.");
     }
 });
 

@@ -1,145 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Parking | Home</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #c2e9fb, #a1c4fd);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      animation: fadeIn 1.2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    header {
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      color: white;
-      padding: 2rem 0;
-      text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
-      animation: pulse 2s infinite alternate;
-    }
-
-    @keyframes pulse {
-      from { opacity: 1; transform: scale(1); }
-      to { opacity: 0.95; transform: scale(1.01); }
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .container {
-      background: white;
-      padding: 3rem 2.5rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 450px;
-      width: 100%;
-      transition: transform 0.3s;
-    }
-
-    .container:hover {
-      transform: translateY(-5px);
-    }
-
-    .container h2 {
-      margin-bottom: 2rem;
-      color: #2c3e50;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 1rem 0.75rem;
-      padding: 0.75rem 2rem;
-      background: linear-gradient(to right, #3498db, #2980b9);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: background 0.3s, transform 0.2s ease;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background: linear-gradient(to right, #2980b9, #1c658c);
-      transform: translateY(-2px);
-    }
-
-    .options {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #f4f4f4;
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 2rem 1.5rem;
-      }
-
-      .options {
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking System</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Smart Parking</h1>
+            </div>
+            <nav class="navbar">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/signup">Sign Up</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-  <header>
-    🚗 Welcome to Smart Parking
-  </header>
+    <!-- Main Section -->
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h2>Welcome to Smart Parking System</h2>
+                <p>Revolutionize your parking experience with our smart parking solution.</p>
+                <a href="/login" class="btn">Get Started</a>
+            </div>
+        </section>
 
-  <main>
-    <div class="container">
-      <h2>Start Your Smart Parking Journey</h2>
-      <div class="options">
-        <a href="/login" class="btn"><i class="fas fa-sign-in-alt"></i> Login</a>
-        <a href="/signup" class="btn"><i class="fas fa-user-plus"></i> Sign Up</a>
-      </div>
-    </div>
-  </main>
+        <section class="features" id="features">
+            <div class="container">
+                <h2>Features</h2>
+                <div class="feature-cards">
+                    <div class="card">
+                        <i class="fas fa-map-marker-alt fa-2x"></i>
+                        <h3>Real-time Slot Availability</h3>
+                        <p>Check available slots in real-time and avoid unnecessary hassle.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-car fa-2x"></i>
+                        <h3>Easy Booking</h3>
+                        <p>Book your parking slot easily through our web platform.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                        <h3>Secure & Reliable</h3>
+                        <p>Experience safe and secure parking management with our trusted system.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <footer>
-    <p>&copy; 2025 Smart Parking. All rights reserved.</p>
-  </footer>
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to Park Smarter?</h2>
+                <a href="/signup" class="btn">Sign Up Now</a>
+            </div>
+        </section>
+    </main>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3 class="footer-heading">Smart Parking</h3>
+                <p>Your intelligent parking assistant. Find, book, and park easily.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/signup">Sign Up</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" id="about">
+                <h3 class="footer-heading">About Us</h3>
+                <p>Smart Parking System aims to streamline your parking experience by offering real-time availability and seamless reservations. Park smarter with us!</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2025 Smart Parking. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- JavaScript for Hamburger Menu -->
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

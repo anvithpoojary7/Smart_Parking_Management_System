@@ -11,6 +11,9 @@ CREATE TABLE USERS (
 ALTER TABLE USERS
 ADD COLUMN Password TEXT;
 
+ALTER TABLE ADMIN
+ADD COLUMN Lot_Id INT UNIQUE REFERENCES PARKING_LOTS(Lot_Id) ON DELETE SET NULL;
+
 -- VEHICLES table
 CREATE TABLE VEHICLES (
     Vehicle_Id SERIAL PRIMARY KEY,
@@ -180,6 +183,76 @@ DELETE FROM USERS;
 DELETE FROM PARKING_SLOTS;
 DELETE FROM PARKING_LOTS;
 
+--Enforce 1 admin per lot
+CREATE OR REPLACE FUNCTION enforce_single_admin_per_lot()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM PARKING_LOTS
+        WHERE Admin_Id = NEW.Admin_Id AND Lot_Id != NEW.Lot_Id
+    ) THEN
+        RAISE EXCEPTION 'An admin can only manage one parking lot';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER one_admin_per_lot_trigger
+BEFORE INSERT OR UPDATE ON PARKING_LOTS
+FOR EACH ROW
+EXECUTE FUNCTION enforce_single_admin_per_lot();
+
+ALTER TABLE PARKING_LOTS
+ADD COLUMN Admin_Id INT UNIQUE REFERENCES ADMIN(Admin_Id) ON DELETE SET NULL;
+
+-- Drop function and trigger if they already exist
+DROP TRIGGER IF EXISTS check_admin_unique ON parking_lots;
+DROP FUNCTION IF EXISTS enforce_single_admin_per_lot;
+
+-- Create the function
+CREATE OR REPLACE FUNCTION enforce_single_admin_per_lot()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM parking_lots
+        WHERE admin_id = NEW.admin_id AND lot_id != NEW.lot_id
+    ) THEN
+        RAISE EXCEPTION 'An admin can only be assigned to one parking lot.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger
+CREATE TRIGGER check_admin_unique
+BEFORE INSERT OR UPDATE ON parking_lots
+FOR EACH ROW
+EXECUTE FUNCTION enforce_single_admin_per_lot();
 
 
+-- Drop the trigger if it exists
+DROP TRIGGER IF EXISTS one_admin_per_lot_trigger ON PARKING_LOTS;
+
+-- Drop the function if it exists
+DROP FUNCTION IF EXISTS enforce_single_admin_per_lot();
+
+
+
+CREATE OR REPLACE FUNCTION enforce_single_admin_per_lot()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM PARKING_LOTS
+        WHERE Admin_Id = NEW.Admin_Id AND Lot_Id != NEW.Lot_Id
+    ) THEN
+        RAISE EXCEPTION 'An admin can only manage one parking lot';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER one_admin_per_lot_trigger
+BEFORE INSERT OR UPDATE ON PARKING_LOTS
+FOR EACH ROW
+EXECUTE FUNCTION enforce_single_admin_per_lot();
 
