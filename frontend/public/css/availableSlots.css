@@ -1,101 +1,95 @@
-/* availableSlots.css */
+/* Glassmorphism Dark Theme for Available Slots */
 
 body {
-    margin: 0;
+    background: #0f172a; /* Deep blue-gray background */
+    color: #f1f5f9;       /* Light text */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6f8;
-    color: #333;
-}
-
-header.dashboard-header {
-    background-color: #0f4c75;
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.user-info {
-    font-size: 0.95rem;
-    display: flex;
-    gap: 1rem;
-}
-
-.dashboard-main {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.dashboard-main h1 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #0f4c75;
-}
-
-.lot-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.lot-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s ease;
-}
-
-.lot-card:hover {
-    transform: translateY(-4px);
-}
-
-.lot-card h3 {
-    margin-top: 0;
-    color: #1b262c;
-}
-
-.lot-stats p {
-    margin: 0.5rem 0;
-}
-
-.book-btn {
-    margin-top: 1rem;
-    padding: 0.75rem 1.25rem;
-    background-color: #3282b8;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.book-btn:hover {
-    background-color: #287aa7;
-}
-
-.book-btn.disabled {
-    background-color: #ccc;
+    padding-bottom: 40px;
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  header {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  }
+  
+  h1 {
+    color: #f8fafc;
+  }
+  
+  p {
+    color: #94a3b8;
+  }
+  
+  /* Card Styling */
+  .grid > div {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .grid > div:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Headings and locations */
+  h2 {
+    color: #38bdf8;
+  }
+  
+  .text-gray-600,
+  .text-gray-700,
+  .text-gray-800 {
+    color: #94a3b8 !important;
+  }
+  
+  /* Progress Bar */
+  .bg-red-500 {
+    background-color: #ef4444 !important;
+  }
+  
+  .bg-yellow-400 {
+    background-color: #facc15 !important;
+  }
+  
+  .bg-gray-200 {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+  
+  /* Button Styles */
+  button {
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  
+  button:hover:not(:disabled) {
+    transform: scale(1.03);
+    opacity: 0.95;
+  }
+  
+  /* Disabled Button */
+  button[disabled] {
+    opacity: 0.5;
     cursor: not-allowed;
-}
-
-footer.dashboard-footer {
-    background-color: #0f4c75;
-    color: white;
-    text-align: center;
-    padding: 1rem;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
+  }
+  
+  /* Footer */
+  footer {
+    color: #64748b;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    backdrop-filter: blur(6px);
+  }
+  
