@@ -70,7 +70,8 @@ app.post("/login", async (req, res) => {
             if (!isMatch) return res.status(401).send("❌ Incorrect user password.");
 
             console.log("👤 User logged in.");
-            return res.redirect(`/user/parking?location=Downtown&userId=${user.user_id}`);
+            return res.redirect(`/user/parking?location=${encodeURIComponent(user.location)}&userId=${user.user_id}`);
+
         } else {
             return res.status(400).send("❌ Invalid user type.");
         }
@@ -92,15 +93,15 @@ app.get("/signup", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-    const { fname, lname, email, phone, user_type, password, vehicle_no, vehicle_type } = req.body;
+    const { fname, lname, email, phone, user_type, password, vehicle_no, vehicle_type, location } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const userResult = await pool.query(`
-            INSERT INTO USERS (Fname, Lname, E_mail, Phone_No, User_Type, Password)
-            VALUES ($1, $2, $3, $4, $5, $6) RETURNING User_Id;
-        `, [fname, lname, email, phone, user_type, hashedPassword]);
+           INSERT INTO USERS (Fname, Lname, E_mail, Phone_No, User_Type, Password, Location)
+           VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING User_Id;
+        `, [fname, lname, email, phone, user_type, hashedPassword, location]); // ✅ Added location here
 
         const userId = userResult.rows[0].user_id;
 
@@ -117,20 +118,23 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+
 // User Parking View
 app.get("/user/parking", async (req, res) => {
-    const { location } = req.query;
     try {
-        const result = await pool.query(
-            "SELECT * FROM PARKING_LOTS WHERE Location = $1",
-            [location]
-        );
-        res.render("pages/availableSlots", { lots: result.rows, location });
+      const result = await pool.query("SELECT * FROM PARKING_LOTS");
+      const noLotsAvailable = result.rows.every(lot => lot.available_slots === 0);
+  
+      res.render("pages/availableSlots", {
+        lots: result.rows,
+        noLotsAvailable // 👈 passed to EJS
+      });
     } catch (err) {
-        console.error("Error fetching slots:", err);
-        res.status(500).send("Something went wrong.");
+      console.error(err);
+      res.status(500).send("Server error");
     }
-});
+  });
+  
 
 // Book Slot Page
 app.get("/bookSlot/:slotId", async (req, res) => {
@@ -171,11 +175,15 @@ app.post("/user/bookSlot", async (req, res) => {
             RETURNING *;
         `, [userId, slotId]);
 
-        await pool.query(
-            "UPDATE PARKING_SLOTS SET Status = 'Occupied' WHERE Slot_Id = $1",
-            [slotId]
-        );
-
+        await pool.query("Call mark_slot_as_booked($1)",[slotId]);
+        
+        await pool.query(`
+            UPDATE PARKING_LOTS 
+            SET available_slots = GREATEST(available_slots - 1, 0)
+            WHERE lot_id = (
+                SELECT lot_id FROM PARKING_SLOTS WHERE slot_id = $1
+            )
+        `, [slotId]);
         const reservation = result.rows[0];
 
         res.render("pages/confirmBooking", {
@@ -186,7 +194,23 @@ app.post("/user/bookSlot", async (req, res) => {
         });
     } catch (err) {
         console.error("Booking failed:", err);
+
+        // ✅ Add this condition to catch your PostgreSQL trigger error
+        if (err.message.includes("Slots full in the selected parking lot")) {
+            return res.status(400).send("❌ No slots available in this parking lot.");
+        }
+
         res.status(500).send("❌ Booking failed.");
+    }
+});
+// Return available slots JSON
+app.get("/api/availableSlots", async (req, res) => {
+    try {
+        const result = await pool.query("SELECT * FROM PARKING_LOTS");
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching slots:", err);
+        res.status(500).json({ error: "Failed to fetch slots" });
     }
 });
 
